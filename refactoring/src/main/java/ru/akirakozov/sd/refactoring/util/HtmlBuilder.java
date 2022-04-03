@@ -8,7 +8,7 @@ import ru.akirakozov.sd.refactoring.domain.Product;
  * @author Madiyar Nurgazin
  */
 public class HtmlBuilder {
-    private final static String HTML_BODY_OPEN_TAG = "<html><body>";
+    private final static String HTML_BODY_OPEN_TAG = "<html><body>\n";
     private final static String HTML_BODY_CLOSE_TAG = "</body></html>";
 
     private final StringBuilder html;

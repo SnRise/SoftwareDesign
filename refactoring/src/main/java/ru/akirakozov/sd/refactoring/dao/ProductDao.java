@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import ru.akirakozov.sd.refactoring.collector.ResultSetCollector;
-import ru.akirakozov.sd.refactoring.db.DatabaseUtils;
+import ru.akirakozov.sd.refactoring.db.Database;
 import ru.akirakozov.sd.refactoring.domain.Product;
 import ru.akirakozov.sd.refactoring.util.ResourceLoader;
 
@@ -16,8 +16,14 @@ import ru.akirakozov.sd.refactoring.util.ResourceLoader;
  */
 public class ProductDao {
 
+    private final Database db;
+
+    public ProductDao(Database db) {
+        this.db = db;
+    }
+
     public void save(Product product) throws IOException {
-        DatabaseUtils.executeSqlInsert(product.getName(), product.getPrice());
+        db.executeSqlInsert(product.getName(), product.getPrice());
     }
 
     public List<Product> findAll() throws IOException {
@@ -43,6 +49,6 @@ public class ProductDao {
     private <T> T find(String sqlPath, Function<ResultSet, T> collector) throws IOException {
         String sql = ResourceLoader.load(sqlPath);
 
-        return DatabaseUtils.executeSqlQuery(sql, collector);
+        return db.executeSqlQuery(sql, collector);
     }
 }
