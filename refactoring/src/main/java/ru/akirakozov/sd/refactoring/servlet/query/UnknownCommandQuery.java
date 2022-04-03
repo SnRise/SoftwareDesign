@@ -7,6 +7,7 @@ public class UnknownCommandQuery extends Query {
     private final String command;
 
     public UnknownCommandQuery(String command) {
+        super(null);
         this.command = command;
     }
 
