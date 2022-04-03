@@ -2,6 +2,7 @@ package ru.akirakozov.sd.refactoring.servlet.query;
 
 import java.io.IOException;
 
+import ru.akirakozov.sd.refactoring.dao.ProductDao;
 import ru.akirakozov.sd.refactoring.util.HtmlBuilder;
 
 /**
@@ -9,6 +10,7 @@ import ru.akirakozov.sd.refactoring.util.HtmlBuilder;
  */
 public abstract class Query {
     protected final HtmlBuilder htmlBuilder = new HtmlBuilder();
+    protected final ProductDao productDao = new ProductDao();
 
     public static Query choose(String command) {
         switch (command) {

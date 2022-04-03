@@ -26,7 +26,7 @@ public class ResultSetCollector {
         }
     }
 
-    public static Optional<Long> collectPrice(ResultSet rs) {
+    public static Optional<Long> collectOne(ResultSet rs) {
         try {
             if (rs.next()) {
                 return Optional.of(rs.getLong(1));
