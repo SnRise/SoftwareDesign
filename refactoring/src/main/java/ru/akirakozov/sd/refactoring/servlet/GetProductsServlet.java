@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import ru.akirakozov.sd.refactoring.collector.ResultSetCollector;
 import ru.akirakozov.sd.refactoring.db.DatabaseUtils;
 import ru.akirakozov.sd.refactoring.domain.Product;
+import ru.akirakozov.sd.refactoring.util.HtmlBuilder;
 import ru.akirakozov.sd.refactoring.util.ResourceLoader;
 
 /**
@@ -22,12 +23,12 @@ public class GetProductsServlet extends HttpServlet {
         String sql = ResourceLoader.load("sql/select.sql");
         List<Product> products = DatabaseUtils.executeSqlQuery(sql, ResultSetCollector::collectProducts);
 
-        response.getWriter().println("<html><body>");
+        HtmlBuilder htmlBuilder = new HtmlBuilder();
 
         for (Product product : products) {
-            response.getWriter().println(product.getName() + "\t" + product.getPrice() + "</br>");
+            htmlBuilder.addLine(product.getName() + "\t" + product.getPrice() + "</br>");
         }
-        response.getWriter().println("</body></html>");
+        response.getWriter().println(htmlBuilder.build());
 
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);

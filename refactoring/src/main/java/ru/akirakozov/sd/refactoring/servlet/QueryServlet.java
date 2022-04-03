@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import ru.akirakozov.sd.refactoring.collector.ResultSetCollector;
 import ru.akirakozov.sd.refactoring.db.DatabaseUtils;
 import ru.akirakozov.sd.refactoring.domain.Product;
+import ru.akirakozov.sd.refactoring.util.HtmlBuilder;
 import ru.akirakozov.sd.refactoring.util.ResourceLoader;
 
 /**
@@ -22,54 +23,45 @@ public class QueryServlet extends HttpServlet {
         String command = request.getParameter("command");
         String sql;
 
+        HtmlBuilder htmlBuilder = new HtmlBuilder();
+
         if ("max".equals(command)) {
             sql = ResourceLoader.load("sql/max.sql");
             List<Product> products = DatabaseUtils.executeSqlQuery(sql, ResultSetCollector::collectProducts);
 
-            response.getWriter().println("<html><body>");
-            response.getWriter().println("<h1>Product with max price: </h1>");
+            htmlBuilder.addHeader("Product with max price: ", 1);
 
             for (Product product : products) {
-                response.getWriter().println(product.getName() + "\t" + product.getPrice() + "</br>");
+                htmlBuilder.addLine(product.getName() + "\t" + product.getPrice() + "</br>");
             }
-            response.getWriter().println("</body></html>");
         } else if ("min".equals(command)) {
             sql = ResourceLoader.load("sql/min.sql");
             List<Product> products = DatabaseUtils.executeSqlQuery(sql, ResultSetCollector::collectProducts);
 
-            response.getWriter().println("<html><body>");
-            response.getWriter().println("<h1>Product with min price: </h1>");
+            htmlBuilder.addHeader("Product with min price: ", 1);
 
             for (Product product : products) {
-                response.getWriter().println(product.getName() + "\t" + product.getPrice() + "</br>");
+                htmlBuilder.addLine(product.getName() + "\t" + product.getPrice() + "</br>");
             }
-            response.getWriter().println("</body></html>");
         } else if ("sum".equals(command)) {
             sql = ResourceLoader.load("sql/sum.sql");
             Optional<Long> price = DatabaseUtils.executeSqlQuery(sql, ResultSetCollector::collectPrice);
 
-            response.getWriter().println("<html><body>");
-            response.getWriter().println("Summary price: ");
+            htmlBuilder.addLine("Summary price: ");
 
-            if (price.isPresent()) {
-                response.getWriter().println(price.get());
-            }
-            response.getWriter().println("</body></html>");
+            price.ifPresent(p -> htmlBuilder.addLine(p.toString()));
         } else if ("count".equals(command)) {
             sql = ResourceLoader.load("sql/count.sql");
             Optional<Long> price = DatabaseUtils.executeSqlQuery(sql, ResultSetCollector::collectPrice);
 
-            response.getWriter().println("<html><body>");
-            response.getWriter().println("Number of products: ");
+            htmlBuilder.addLine("Number of products: ");
 
-            if (price.isPresent()) {
-                response.getWriter().println(price.get());
-            }
-            response.getWriter().println("</body></html>");
+            price.ifPresent(p -> htmlBuilder.addLine(p.toString()));
         } else {
-            response.getWriter().println("Unknown command: " + command);
+            htmlBuilder.addLine("Unknown command: " + command);
         }
 
+        response.getWriter().println(htmlBuilder.build());
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);
     }
