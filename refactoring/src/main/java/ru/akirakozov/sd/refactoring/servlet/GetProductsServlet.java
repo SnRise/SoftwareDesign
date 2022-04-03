@@ -23,11 +23,8 @@ public class GetProductsServlet extends HttpServlet {
         String sql = ResourceLoader.load("sql/select.sql");
         List<Product> products = DatabaseUtils.executeSqlQuery(sql, ResultSetCollector::collectProducts);
 
-        HtmlBuilder htmlBuilder = new HtmlBuilder();
+        HtmlBuilder htmlBuilder = new HtmlBuilder().addProducts(products);
 
-        for (Product product : products) {
-            htmlBuilder.addLine(product.getName() + "\t" + product.getPrice() + "</br>");
-        }
         response.getWriter().println(htmlBuilder.build());
 
         response.setContentType("text/html");

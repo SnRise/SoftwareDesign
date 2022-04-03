@@ -1,5 +1,9 @@
 package ru.akirakozov.sd.refactoring.util;
 
+import java.util.List;
+
+import ru.akirakozov.sd.refactoring.domain.Product;
+
 /**
  * @author Madiyar Nurgazin
  */
@@ -20,6 +24,13 @@ public class HtmlBuilder {
 
     public HtmlBuilder addHeader(String line, int level) {
         html.append((String.format("<h%d>%s</h%s>", level, line, level))).append('\n');
+        return this;
+    }
+
+    public HtmlBuilder addProducts(List<Product> products) {
+        for (Product product : products) {
+            addLine(product.getName() + "\t" + product.getPrice() + "</br>");
+        }
         return this;
     }
 

@@ -18,10 +18,6 @@ public class MinQuery extends Query {
         String sql = ResourceLoader.load("sql/min.sql");
         List<Product> products = DatabaseUtils.executeSqlQuery(sql, ResultSetCollector::collectProducts);
 
-        htmlBuilder.addHeader("Product with min price: ", 1);
-
-        for (Product product : products) {
-            htmlBuilder.addLine(product.getName() + "\t" + product.getPrice() + "</br>");
-        }
+        htmlBuilder.addHeader("Product with min price: ", 1).addProducts(products);
     }
 }
